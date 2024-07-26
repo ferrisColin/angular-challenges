@@ -11,16 +11,10 @@ import { CardComponent } from '../../ui/card/card.component';
     <app-card
       [list]="students"
       [type]="cardType"
-      customClass="bg-light-green"></app-card>
+      imgSrc="assets/img/student.webp"
+      [customClass]="'rgba(0, 250, 0, 0.1)'"></app-card>
   `,
   standalone: true,
-  styles: [
-    `
-      ::ng-deep .bg-light-green {
-        background-color: rgba(0, 250, 0, 0.1);
-      }
-    `,
-  ],
   imports: [CardComponent],
 })
 export class StudentCardComponent implements OnInit {

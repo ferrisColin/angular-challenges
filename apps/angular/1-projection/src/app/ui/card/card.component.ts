@@ -1,8 +1,8 @@
 import { NgFor, NgIf } from '@angular/common';
 import { Component, Input } from '@angular/core';
-import { randStudent, randTeacher } from '../../data-access/fake-http.service';
-import { StudentStore } from '../../data-access/student.store';
-import { TeacherStore } from '../../data-access/teacher.store';
+// import { StudentStore } from '../../data-access/student.store';
+// import { TeacherStore } from '../../data-access/teacher.store';
+import { MasterStore } from '../../data-access/master.store';
 import { CardType } from '../../model/card.model';
 import { ListItemComponent } from '../list-item/list-item.component';
 
@@ -11,20 +11,12 @@ import { ListItemComponent } from '../list-item/list-item.component';
   template: `
     <div
       class="flex w-fit flex-col gap-3 rounded-md border-2 border-black p-4"
-      [class]="customClass">
-      <img
-        *ngIf="type === CardType.TEACHER"
-        src="assets/img/teacher.png"
-        width="200px" />
-      <img
-        *ngIf="type === CardType.STUDENT"
-        src="assets/img/student.webp"
-        width="200px" />
-
+      [style.backgroundColor]="customClass">
+      <img [src]="imgSrc" width="200px" />
       <section>
         <app-list-item
           *ngFor="let item of list"
-          [name]="item.firstName"
+          [name]="item.firstName || item.name"
           [id]="item.id"
           [type]="type"></app-list-item>
       </section>
@@ -40,22 +32,38 @@ import { ListItemComponent } from '../list-item/list-item.component';
   imports: [NgIf, NgFor, ListItemComponent],
 })
 export class CardComponent {
+  @Input() imgSrc = '';
   @Input() list: any[] | null = null;
-  @Input() type!: CardType;
+  // @Input() type!: CardType;
   @Input() customClass = '';
+  private _type!: CardType;
+
+  @Input()
+  set type(value: CardType) {
+    console.log('TYPE INPUT: ', value);
+
+    this._type = value;
+    // this.masterStore.type = value;
+    this.masterStore.type.next(value);
+    // this.onMyPropertyChange();
+  }
+
+  get type(): CardType {
+    return this._type;
+  }
 
   CardType = CardType;
 
-  constructor(
-    private teacherStore: TeacherStore,
-    private studentStore: StudentStore,
-  ) {}
+  constructor(private masterStore: MasterStore) {}
 
   addNewItem() {
-    if (this.type === CardType.TEACHER) {
-      this.teacherStore.addOne(randTeacher());
-    } else if (this.type === CardType.STUDENT) {
-      this.studentStore.addOne(randStudent());
-    }
+    console.log('ADD NEW ITEM: ', this.type);
+    this.masterStore.addOne(this.type);
+    // this.masterStore.de
+    // if (this.type === CardType.TEACHER) {
+    //   this.teacherStore.addOne(randTeacher());
+    // } else if (this.type === CardType.STUDENT) {
+    //   this.studentStore.addOne(randStudent());
+    // }
   }
 }
