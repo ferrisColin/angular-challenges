@@ -41,13 +41,26 @@ export class AppComponent {
   gpu = model(false);
 
   constructor() {
-    /* 
-      Explain for your junior team mate why this bug occurs ...
-    */
     effect(() => {
-      if (this.drive() || this.ram() || this.gpu()) {
+      if (this.drive()) {
+        alert('Price increased!');
+      }
+    });
+
+    effect(() => {
+      if (this.ram()) {
+        alert('Price increased!');
+      }
+    });
+
+    effect(() => {
+      if (this.gpu()) {
         alert('Price increased!');
       }
     });
   }
+
+  // console.log('drive: ', this.drive());
+  // console.log('ram: ', this.ram());
+  // console.log('gpu: ', this.gpu());
 }
