@@ -1,5 +1,10 @@
 import { CDFlashingDirective } from '@angular-challenges/shared/directives';
-import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  computed,
+  inject,
+} from '@angular/core';
 import { UserStore } from './user.service';
 
 @Component({
@@ -7,7 +12,7 @@ import { UserStore } from './user.service';
   standalone: true,
   template: `
     <div cd-flash class="m-4 block border border-gray-500 p-4">
-      Name: {{ userService.user().name }}
+      Name: {{ name() }}
     </div>
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -15,4 +20,5 @@ import { UserStore } from './user.service';
 })
 export class NameComponent {
   userService = inject(UserStore);
+  name = computed(() => this.userService.user().name);
 }
